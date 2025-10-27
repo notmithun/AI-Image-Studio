@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Studio</title>
+</head>
+<body>
+    <h1>Welcome to AI Image Studio!</h1>
+    <p>Create images just by describing them!</p>
+    <br>
+    <p>Prompt:</p>
+    <input id="prompt" placeholder="A monkey jumping on a bed...">
+    <button id="sumbit_btn" onclick="generate()">GENERTE!!!!!!</button>
+    <div id="output"></div>
+    <script>
+        async function generate() {
+            console.log("Started!")
+            const prompt = document.getElementById("prompt").value
+            console.log(prompt)
+            if (!prompt) {
+                return alert("BRO TYPE SMTHING")
+            }
+
+            document.getElementById("output").innerHTML = ""
+            console.log(JSON.stringify({prompt}))
+
+            const res = await fetch("/generate", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({prompt})
+            })
+
+            console.log(res)
+
+            const data = await res.json()
+            console.log(data)
+            if (data.error) {
+                document.getElementById("output").innerHTML = `bro mb smthing went wrong, what went wrong is: ${data.error}`
+                console.error(data.error)
+            } else {
+                console.log("Success!")
+                console.log(data.imgid)
+                 document.getElementById("output").innerHTML = `
+                 <img src="data:image/png;base64,${data.imgid}">
+                 `
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,6 +1,5 @@
 from flask import Flask, render_template, jsonify, request
 from io import BytesIO
-from markupsafe import escape
 import requests
 import base64
 from dotenv import load_dotenv
